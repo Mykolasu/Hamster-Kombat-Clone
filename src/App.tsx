@@ -1,7 +1,13 @@
 import "./App.css";
 import Hamster from "./icons/Hamster";
 import { useEffect, useState } from "react";
-import { binanceLogo, dollarCoin, dailyReward, dailyCipher, dailyCombo } from "./images";
+import {
+  binanceLogo,
+  dollarCoin,
+  dailyReward,
+  dailyCipher,
+  dailyCombo,
+} from "./images";
 import Info from "./icons/Info";
 import Settings from "./icons/Settings";
 
@@ -34,6 +40,10 @@ function App() {
 
   const [levelIndex, setLevelIndex] = useState(2);
   const [points, setPoints] = useState(49855);
+  const [clicks, setClicks] = useState<{ id: number; x: number; y: number }[]>(
+    []
+  );
+  const pointsToAdd = 11;
   const profitPerHour = 132344;
 
   const [dailyRewardTimeLeft, setDailyRewardTimeLeft] = useState("");
@@ -57,6 +67,20 @@ function App() {
     const paddedMinutes = minutes.toString().padStart(2, "0");
 
     return `${paddedHours}:${paddedMinutes}`;
+  };
+
+  const handleCardClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    card.style.transform = `perspective(1000px) rotateX(${-y / 10}deg) rotateY (${x / 10})deg`;
+    setTimeout(() => {
+      card.style.transform = '';
+    }, 100);
+
+    setPoints(points + pointsToAdd);
+    setClicks([...clicks, {id: Date.now(), x: e.pageX, y: e.pageY}])
   };
 
   useEffect(() => {
@@ -165,7 +189,7 @@ function App() {
                 </p>
               </div>
               <div className="bg-[#272a2f] rounded-lg px-4 py-2 w-full relative">
-              <div className="dot"></div>
+                <div className="dot"></div>
                 <img
                   src={dailyCipher}
                   alt="Daily Cipher"
@@ -179,7 +203,7 @@ function App() {
                 </p>
               </div>
               <div className="bg-[#272a2f] rounded-lg px-4 py-2 w-full relative">
-              <div className="dot"></div>
+                <div className="dot"></div>
                 <img
                   src={dailyCombo}
                   alt="Daily Combo"
@@ -196,8 +220,10 @@ function App() {
 
             <div className="px-4 mt-4 flex justify-center">
               <div className="px-4 py-2 flex items-center space-x-2">
-                <img src={dollarCoin} alt="Dollar Coin" className="w-10 h-10"/>
-                <p className="text-4xl text-white">{points.toLocaleString('en-EN')}</p>
+                <img src={dollarCoin} alt="Dollar Coin" className="w-10 h-10" />
+                <p className="text-4xl text-white">
+                  {points.toLocaleString("en-EN")}
+                </p>
               </div>
             </div>
           </div>
