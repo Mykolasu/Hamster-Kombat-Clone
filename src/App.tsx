@@ -1,9 +1,9 @@
 import "./App.css";
 import Hamster from "./icons/Hamster";
 import { useEffect, useState } from "react";
-import { binanceLogo, dollarCoin } from "./images";
+import { binanceLogo, dollarCoin, dailyReward, dailyCipher, dailyCombo } from "./images";
 import Info from "./icons/Info";
-import Settings from './icons/Settings';
+import Settings from "./icons/Settings";
 
 function App() {
   const levelNames = [
@@ -48,7 +48,7 @@ function App() {
     if (now.getUTCHours() >= targetHour) {
       target.setUTCDate(target.getUTCDate() + 1);
     }
-    
+
     const diff = target.getTime() - now.getTime();
     const hours = Math.floor(diff / (1000 * 60 * 60));
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
@@ -57,17 +57,17 @@ function App() {
     const paddedMinutes = minutes.toString().padStart(2, "0");
 
     return `${paddedHours}:${paddedMinutes}`;
-  }
+  };
 
   useEffect(() => {
     const updateCountdowns = () => {
       setDailyRewardTimeLeft(calculateTimeLeft(0));
       setDailyCipherTimeLeft(calculateTimeLeft(19));
       setDailyComboTimeLeft(calculateTimeLeft(12));
-    }
+    };
 
     updateCountdowns();
-    const interval = setInterval(updateCountdowns, 60000);  // update every minute
+    const interval = setInterval(updateCountdowns, 60000); // update every minute
 
     return () => clearInterval(interval);
   }, []);
@@ -125,15 +125,21 @@ function App() {
                 </div>
               </div>
             </div>
-            <div className="flex items-center w-2/3 border-2 border-[#43433b] rounded-full
-            px-4 py-[2px] bg-[#43433b]/[0.6] max-w-64">
-              <img src={binanceLogo} alt="Exchange" className="w-8 h-8"/>
+            <div
+              className="flex items-center w-2/3 border-2 border-[#43433b] rounded-full
+            px-4 py-[2px] bg-[#43433b]/[0.6] max-w-64"
+            >
+              <img src={binanceLogo} alt="Exchange" className="w-8 h-8" />
               <div className="flex-1 text-center">
-                <p className="text-xs text-[#85827d] font-medium">Profit per hour</p>
+                <p className="text-xs text-[#85827d] font-medium">
+                  Profit per hour
+                </p>
                 <div className="flex items-center justify-center space-x-1">
                   <img src={dollarCoin} alt="Dollar Coin" className="w-5 h-5" />
-                  <p className="text-sm">{formatProfitPerHour(profitPerHour)}</p>
-                  <Info size={20} className="text-[#43433b]"/>
+                  <p className="text-sm">
+                    {formatProfitPerHour(profitPerHour)}
+                  </p>
+                  <Info size={20} className="text-[#43433b]" />
                 </div>
               </div>
               <Settings className="text-white" />
@@ -143,14 +149,59 @@ function App() {
 
         <div className="top-glow flex-grow mt-4 bg-[#f3ba2f] rounded-t-[48px] relative top-glow z-0">
           <div className="absolute top-1 left-0 right-0 bottom-0 bg-[#1d2025] rounded-t-[46px]">
-
             <div className="px-4 mt-6 flex justify-between gap-2">
-
+              <div className="bg-[#272a2f] rounded-lg px-4 py-2 w-full relative">
+                <div className="dot"></div>
+                <img
+                  src={dailyReward}
+                  alt="Daily Reward"
+                  className="mx-auto w-12 h-12"
+                />
+                <p className="text-[10px] text-center text-white mt-1">
+                  Daily reward
+                </p>
+                <p className="text-[10px] font-medium text-center text-gray-400 mt-2">
+                  {dailyRewardTimeLeft}
+                </p>
+              </div>
+              <div className="bg-[#272a2f] rounded-lg px-4 py-2 w-full relative">
+              <div className="dot"></div>
+                <img
+                  src={dailyCipher}
+                  alt="Daily Cipher"
+                  className="mx-auto w-12 h-12"
+                />
+                <p className="text-[10px] text-center text-white mt-1">
+                  Daily cipher
+                </p>
+                <p className="text-[10px] font-medium text-center text-gray-400 mt-2">
+                  {dailyCipherTimeLeft}
+                </p>
+              </div>
+              <div className="bg-[#272a2f] rounded-lg px-4 py-2 w-full relative">
+              <div className="dot"></div>
+                <img
+                  src={dailyCombo}
+                  alt="Daily Combo"
+                  className="mx-auto w-12 h-12"
+                />
+                <p className="text-[10px] text-center text-white mt-1">
+                  Daily combo
+                </p>
+                <p className="text-[10px] font-medium text-center text-gray-400 mt-2">
+                  {dailyComboTimeLeft}
+                </p>
+              </div>
             </div>
 
+            <div className="px-4 mt-4 flex justify-center">
+              <div className="px-4 py-2 flex items-center space-x-2">
+                <img src={dollarCoin} alt="Dollar Coin" className="w-10 h-10"/>
+                <p className="text-4xl text-white">{points.toLocaleString('en-EN')}</p>
+              </div>
+            </div>
           </div>
         </div>
-
       </div>
     </div>
   );
