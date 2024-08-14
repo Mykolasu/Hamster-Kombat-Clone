@@ -1,8 +1,9 @@
 import "./App.css";
 import Hamster from "./icons/Hamster";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { binanceLogo, dollarCoin } from "./images";
 import Info from "./icons/Info";
+import Settings from './icons/Settings';
 
 function App() {
   const levelNames = [
@@ -34,6 +35,42 @@ function App() {
   const [levelIndex, setLevelIndex] = useState(2);
   const [points, setPoints] = useState(49855);
   const profitPerHour = 132344;
+
+  const [dailyRewardTimeLeft, setDailyRewardTimeLeft] = useState("");
+  const [dailyCipherTimeLeft, setDailyCipherTimeLeft] = useState("");
+  const [dailyComboTimeLeft, setDailyComboTimeLeft] = useState("");
+
+  const calculateTimeLeft = (targetHour: number) => {
+    const now = new Date();
+    const target = new Date(now);
+    target.setUTCHours(targetHour, 0, 0, 0);
+
+    if (now.getUTCHours() >= targetHour) {
+      target.setUTCDate(target.getUTCDate() + 1);
+    }
+    
+    const diff = target.getTime() - now.getTime();
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+    const paddedHours = hours.toString().padStart(2, "0");
+    const paddedMinutes = minutes.toString().padStart(2, "0");
+
+    return `${paddedHours}:${paddedMinutes}`;
+  }
+
+  useEffect(() => {
+    const updateCountdowns = () => {
+      setDailyRewardTimeLeft(calculateTimeLeft(0));
+      setDailyCipherTimeLeft(calculateTimeLeft(19));
+      setDailyComboTimeLeft(calculateTimeLeft(12));
+    }
+
+    updateCountdowns();
+    const interval = setInterval(updateCountdowns, 60000);  // update every minute
+
+    return () => clearInterval(interval);
+  }, []);
 
   const calculateProgress = () => {
     if (levelIndex >= levelNames.length - 1) {
@@ -99,9 +136,21 @@ function App() {
                   <Info size={20} className="text-[#43433b]"/>
                 </div>
               </div>
+              <Settings className="text-white" />
             </div>
           </div>
         </div>
+
+        <div className="top-glow flex-grow mt-4 bg-[#f3ba2f] rounded-t-[48px] relative top-glow z-0">
+          <div className="absolute top-1 left-0 right-0 bottom-0 bg-[#1d2025] rounded-t-[46px]">
+
+            <div className="px-4 mt-6 flex justify-between gap-2">
+
+            </div>
+
+          </div>
+        </div>
+
       </div>
     </div>
   );
