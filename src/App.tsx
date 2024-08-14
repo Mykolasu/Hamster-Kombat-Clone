@@ -1,6 +1,8 @@
 import "./App.css";
 import Hamster from "./icons/Hamster";
 import { useState } from "react";
+import { binanceLogo, dollarCoin } from "./images";
+import Info from "./icons/Info";
 
 function App() {
   const levelNames = [
@@ -17,20 +19,21 @@ function App() {
   ];
 
   const levelMinPoints = [
-    0,         // bronze
-    5000,      // silver
-    25000,     // gold
-    100000,    // platinum
-    1000000,   // diamond
-    2000000,   // epic
-    10000000,  // legendary
-    50000000,  // master
+    0, // bronze
+    5000, // silver
+    25000, // gold
+    100000, // platinum
+    1000000, // diamond
+    2000000, // epic
+    10000000, // legendary
+    50000000, // master
     100000000, // grandMaster
-    1000000000 // lord
-  ]
+    1000000000, // lord
+  ];
 
   const [levelIndex, setLevelIndex] = useState(2);
   const [points, setPoints] = useState(49855);
+  const profitPerHour = 132344;
 
   const calculateProgress = () => {
     if (levelIndex >= levelNames.length - 1) {
@@ -38,9 +41,17 @@ function App() {
     }
     const currentLevelMin = levelMinPoints[levelIndex];
     const nextLevelMin = levelMinPoints[levelIndex + 1];
-    const progress = ((points - currentLevelMin) / (nextLevelMin - currentLevelMin)) * 100;
+    const progress =
+      ((points - currentLevelMin) / (nextLevelMin - currentLevelMin)) * 100;
     return Math.min(progress, 100);
-  }
+  };
+
+  const formatProfitPerHour = (profit: number) => {
+    if (profit >= 1000000000) return `+${(profit / 1000000000).toFixed(2)}B`;
+    if (profit >= 1000000) return `+${(profit / 1000000).toFixed(2)}M`;
+    if (profit >= 1000) return `+${(profit / 1000).toFixed(2)}K`;
+    return `+${profit}`;
+  };
 
   return (
     <div className="bg-black flex justify-center">
@@ -66,6 +77,26 @@ function App() {
                       / {levelNames.length}
                     </span>
                   </p>
+                </div>
+                <div className="flex items-center mt-1 border-2 border-[#43433b] rounded-full">
+                  <div className="w-full h-2 bg-[#43433b]/[0.6] rounded-full">
+                    <div
+                      className="progress-gradient h-2 rounded-full"
+                      style={{ width: `${calculateProgress()}%` }}
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center w-2/3 border-2 border-[#43433b] rounded-full
+            px-4 py-[2px] bg-[#43433b]/[0.6] max-w-64">
+              <img src={binanceLogo} alt="Exchange" className="w-8 h-8"/>
+              <div className="flex-1 text-center">
+                <p className="text-xs text-[#85827d] font-medium">Profit per hour</p>
+                <div className="flex items-center justify-center space-x-1">
+                  <img src={dollarCoin} alt="Dollar Coin" className="w-5 h-5" />
+                  <p className="text-sm">{formatProfitPerHour(profitPerHour)}</p>
+                  <Info size={20} className="text-[#43433b]"/>
                 </div>
               </div>
             </div>
