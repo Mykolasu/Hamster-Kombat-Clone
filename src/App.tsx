@@ -48,8 +48,8 @@ function App() {
   const [clicks, setClicks] = useState<{ id: number; x: number; y: number }[]>(
     []
   );
-  const pointsToAdd = 11;
-  const profitPerHour = 132344;
+  const pointsToAdd = 200;
+  const profitPerHour = 12344;
 
   const [dailyRewardTimeLeft, setDailyRewardTimeLeft] = useState("");
   const [dailyCipherTimeLeft, setDailyCipherTimeLeft] = useState("");
@@ -79,11 +79,9 @@ function App() {
     const rect = card.getBoundingClientRect();
     const x = e.clientX - rect.left - rect.width / 2;
     const y = e.clientY - rect.top - rect.height / 2;
-    card.style.transform = `perspective(1000px) rotateX(${
-      -y / 10
-    }deg) rotateY (${x / 10})deg`;
+    card.style.transform = `perspective(1000px) rotateX(${-y / 10}deg) rotateY(${x / 10}deg)`;
     setTimeout(() => {
-      card.style.transform = "";
+      card.style.transform = '';
     }, 100);
 
     setPoints(points + pointsToAdd);
@@ -124,6 +122,24 @@ function App() {
     if (profit >= 1000) return `+${(profit / 1000).toFixed(2)}K`;
     return `+${profit}`;
   };
+
+  useEffect(() => {
+    const currentLevelMin = levelMinPoints[levelIndex];
+    const nextLevelMin = levelMinPoints[levelIndex + 1];
+    if (points >= nextLevelMin && levelIndex < levelNames.length - 1) {
+      setLevelIndex(levelIndex + 1);
+    } else if (points < currentLevelMin && levelIndex > 0) {
+      setLevelIndex(levelIndex - 1);
+    }
+  }, [points, levelIndex, levelMinPoints, levelNames.length]);
+  
+  useEffect(() => {
+    const pointsPerSecond = Math.floor(profitPerHour / 3600);
+    const interval = setInterval(() => {
+      setPoints(prevPoints => prevPoints + pointsPerSecond);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [profitPerHour]);
 
   return (
     <div className="bg-black flex justify-center">
@@ -246,7 +262,7 @@ function App() {
                 <div className="w-full h-full rounded-full circle-inner">
                   <img
                     src={mainCharacter}
-                    alt="Main Charater"
+                    alt="Main Character"
                     className="w-full h-full"
                   />
                 </div>
