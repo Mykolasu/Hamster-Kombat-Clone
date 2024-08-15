@@ -7,6 +7,7 @@ import {
   dailyReward,
   dailyCipher,
   dailyCombo,
+  mainCharacter,
 } from "./images";
 import Info from "./icons/Info";
 import Settings from "./icons/Settings";
@@ -74,13 +75,15 @@ function App() {
     const rect = card.getBoundingClientRect();
     const x = e.clientX - rect.left - rect.width / 2;
     const y = e.clientY - rect.top - rect.height / 2;
-    card.style.transform = `perspective(1000px) rotateX(${-y / 10}deg) rotateY (${x / 10})deg`;
+    card.style.transform = `perspective(1000px) rotateX(${
+      -y / 10
+    }deg) rotateY (${x / 10})deg`;
     setTimeout(() => {
-      card.style.transform = '';
+      card.style.transform = "";
     }, 100);
 
     setPoints(points + pointsToAdd);
-    setClicks([...clicks, {id: Date.now(), x: e.pageX, y: e.pageY}])
+    setClicks([...clicks, { id: Date.now(), x: e.pageX, y: e.pageY }]);
   };
 
   useEffect(() => {
@@ -226,9 +229,26 @@ function App() {
                 </p>
               </div>
             </div>
+
+            <div className="px-4 mt-4 flex justify-center">
+              <div
+                className="w-80 h-80 p-4 rounded-full circle-outer"
+                onClick={handleCardClick}
+              >
+                <div className="w-full h-full rounded-full circle-inner">
+                  <img
+                    src={mainCharacter}
+                    alt="Main Charater"
+                    className="w-full h-full"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+
+      
     </div>
   );
 }

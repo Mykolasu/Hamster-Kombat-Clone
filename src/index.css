@@ -4,4 +4,6 @@
 
 body {
     font-family: sans-serif;
+    cursor: default;
+    user-select: none;
 }
