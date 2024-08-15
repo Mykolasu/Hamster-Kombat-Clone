@@ -90,6 +90,10 @@ function App() {
     setClicks([...clicks, { id: Date.now(), x: e.pageX, y: e.pageY }]);
   };
 
+  const handleAnimationEnd = (id: number) => {
+    setClicks((prevClicks) => prevClicks.filter(click => click.id !== id));
+  }
+
   useEffect(() => {
     const updateCountdowns = () => {
       setDailyRewardTimeLeft(calculateTimeLeft(0));
@@ -275,6 +279,21 @@ function App() {
           <p className="mt-1">Airdrop</p>
         </div>
       </div>
+
+      {clicks.map((click) => (
+        <div
+          key={click.id}
+          className="absolute text-5xl font-bold opacity-0 text-white pointer-events-none"
+          style={{
+            top: `${click.y - 42}px`,
+            left: `${click.x - 28}px`,
+            animation: 'float 1s ease-out'
+          }}
+          onAnimationEnd={() => handleAnimationEnd(click.id)}
+        >
+          {pointsToAdd}
+        </div>
+      ))}
     </div>
   );
 }
