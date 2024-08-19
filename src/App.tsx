@@ -17,8 +17,6 @@ import Friends from './icons/Friends';
 import Coins from "./icons/Coins";
 
 function App() {
-  // const tg = window.Telegram.WebApp
-  
   const levelNames = [
     "Bronze", // from 0 to 4999 coins
     "Silver", // from 5000 coins to 24,999 coins
@@ -152,7 +150,7 @@ function App() {
               <Hamster size={24} className="text-[#d4d4d4]" />
             </div>
             <div>
-              {/* <p className="text-sm">{tg.initDataUnsafe?.user?.username}</p> */}
+              <p className="text-sm">Mykolka (CEO)</p>
             </div>
           </div>
 
